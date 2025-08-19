@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# 安装依赖
+apk add --no-cache curl unzip
+
+# 下载并准备 Xray
+curl -L -H "Cache-Control: no-cache" -o /tmp/xray.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
+unzip /tmp/xray.zip -d /tmp
+rm /tmp/xray.zip
+chmod +x /tmp/xray
+
+# 替换配置文件中的环境变量
+sed -i "s/\${PORT}/${PORT}/g; s/\${UUID}/${UUID}/g; s#\${WSPATH}#${WSPATH}#g" /app/config.json
+
+# 启动 Xray
+/tmp/xray -config /app/config.json
